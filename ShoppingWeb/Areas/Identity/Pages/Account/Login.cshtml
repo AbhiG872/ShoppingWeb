@@ -1,0 +1,79 @@
+﻿@page
+@model LoginModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="auth-wrapper">
+
+    <div class="auth-card shadow-lg">
+
+        <!-- Title -->
+        <div class="text-center mb-4">
+            <h2 class="fw-bold text-primary">ShoppingWeb</h2>
+            <p class="text-muted">Welcome back! 👋</p>
+        </div>
+
+        <form method="post">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger small mb-2"></div>
+
+            <!-- Email -->
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Email" class="form-control" placeholder="Email" />
+                <label>Email address</label>
+            </div>
+
+            <!-- Password -->
+            <div class="form-floating mb-3 position-relative">
+                <input asp-for="Input.Password"
+                       type="password"
+                       id="loginPassword"
+                       class="form-control"
+                       placeholder="Password" />
+                <label>Password</label>
+
+                <span class="eye-icon" onclick="togglePassword('loginPassword')">👁</span>
+            </div>
+
+            <!-- Remember + Forgot -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="Input.RememberMe" />
+                    <label class="form-check-label">Remember me</label>
+                </div>
+
+                <a asp-page="./ForgotPassword" class="small text-decoration-none">
+                    Forgot password?
+                </a>
+            </div>
+
+            <!-- Button -->
+            <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold">
+                Login
+            </button>
+
+            <!-- Register -->
+            <p class="text-center mt-3 mb-0">
+                New user?
+                <a asp-page="./Register" class="fw-semibold text-decoration-none">
+                    Create account
+                </a>
+            </p>
+
+        </form>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        function togglePassword(id) {
+            const input = document.getElementById(id);
+            input.type = input.type === "password" ? "text" : "password";
+        }
+    </script>
+}
