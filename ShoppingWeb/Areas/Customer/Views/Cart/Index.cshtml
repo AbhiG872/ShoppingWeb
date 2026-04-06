@@ -1,0 +1,87 @@
+﻿@model Shopping_Models.ViewModels.ShoppingCartVM
+
+<div class="container mt-4">
+    <div class="row">
+
+        <!-- LEFT: CART ITEMS -->
+        <div class="col-lg-8">
+
+            <h4 class="mb-3">Shopping Cart</h4>
+
+            @foreach (var item in Model.ShoppingCartList)
+            {
+                <div class="card mb-3 shadow-sm border-0">
+                    <div class="row g-0 align-items-center">
+
+                        <!-- Image -->
+                        <div class="col-md-3 text-center p-2">
+                            <img src="@item.Product.ImageUrl" class="img-fluid rounded" style="max-height:120px;" />
+                        </div>
+
+                        <!-- Details -->
+                        <div class="col-md-5">
+                            <div class="card-body">
+                                <h6 class="fw-bold">@item.Product.Title</h6>
+                                <p class="text-muted small mb-1">
+                                    @Html.Raw(item.Product.Description)
+                                </p>
+                                <h6 class="text-success">@item.Price.ToString("c")</h6>
+                            </div>
+                        </div>
+
+                        <!-- Quantity -->
+                        <div class="col-md-2 text-center">
+                            <div class="btn-group">
+                                <a asp-action="minus" asp-route-cartId="@item.Id" class="btn btn-outline-secondary btn-sm">
+                                    <i class="bi bi-dash"></i>
+                                </a>
+                                <span class="px-3 pt-1">@item.Count</span>
+                                <a asp-action="plus" asp-route-cartId="@item.Id" class="btn btn-outline-secondary btn-sm">
+                                    <i class="bi bi-plus"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Remove -->
+                        <div class="col-md-2 text-center">
+                            <a asp-action="remove" asp-route-cartId="@item.Id" class="btn btn-outline-danger btn-sm">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- RIGHT: SUMMARY -->
+        <div class="col-lg-4">
+
+            <div class="card shadow border-0 sticky-top" style="top:80px;">
+                <div class="card-body">
+
+                    <h5 class="fw-bold mb-3">Price Details</h5>
+
+                    <div class="d-flex justify-content-between">
+                        <span>Total Items</span>
+                        <span>@Model.ShoppingCartList.Count()</span>
+                    </div>
+
+                    <hr />
+
+                    <div class="d-flex justify-content-between fw-bold">
+                        <span>Total Amount</span>
+                        <span>@Model.OrderHeader.OrderTotal.ToString("c")</span>
+                    </div>
+
+                    <a asp-action="Summary" class="btn btn-primary w-100 mt-3">
+                        Proceed to Checkout
+                    </a>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>

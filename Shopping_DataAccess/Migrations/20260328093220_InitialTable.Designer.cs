@@ -12,8 +12,8 @@ using ShoppingWeb.Data;
 namespace Shopping_DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260323112736_First")]
-    partial class First
+    [Migration("20260328093220_InitialTable")]
+    partial class InitialTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
