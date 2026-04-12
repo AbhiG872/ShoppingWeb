@@ -1,38 +1,54 @@
 ﻿var dataTable;
 
-$(document).ready(function () {
+$(function () {
+    console.log("Product JS Loaded");
     loadDatatable();
 });
 
 function loadDatatable() {
+
+    if ($.fn.DataTable.isDataTable('#tblData')) {
+        $('#tblData').DataTable().clear().destroy();
+    }
+
     dataTable = $('#tblData').DataTable({
         ajax: {
-            url: "/admin/product/getall",
+            url: "/Admin/Product/getall",   // ✅ fixed
             type: "GET",
-            datatype: "json",
-            dataSrc: "data"
-        },
-        columns: [
-            { data: 'title', width: "20%" },
-            { data: 'isbn', width: "15%" },
-            { data: 'listPrice', width: "10%" },
-            { data: 'author', width: "25%" },
-            { data: 'category.categoryName', width: "20%" },
-            {
-                data: 'id',
-                render: function (data) {
-                    return `<div class="w-75 btn-group">
-                                <a href="/Admin/Product/Upsert?id=${data}" class="btn btn-primary mx-2">
-                                    Edit
-                                </a>
-                                <a onclick="Delete('/Admin/Product/Delete/${data}')"
-                                   class="btn btn-danger mx-2">
-                                    Delete
-                                </a>
-                            </div>`;
-                },
-                width: "10%"
+            dataType: "json",
+
+            dataSrc: function (json) {
+                console.log("API Response:", json);
+                return json?.data || [];
+            },
+
+            error: function (xhr, error) {
+                console.error("AJAX Error:", xhr.responseText);
             }
-        ]
+        },
+
+        columns: [
+
+            { data: 'title' },
+
+            { data: 'isbn' },
+
+            { data: 'listPrice' },
+
+            { data: 'author' },
+
+            {
+                data: null,
+                render: function (data) {
+                    return data.category?.categoryName || '';
+                }
+            }
+        ],
+
+        paging: true,
+        searching: true,
+        ordering: true,
+        responsive: true,
+        autoWidth: false
     });
 }

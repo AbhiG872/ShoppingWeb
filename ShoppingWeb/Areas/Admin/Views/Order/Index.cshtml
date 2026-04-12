@@ -1,0 +1,108 @@
+﻿@{
+    var status = Context.Request.Query["status"];
+    var pending = "text-primary";
+    var inProcess = "text-primary";
+    var completed = "text-primary";
+    var approved = "text-primary";
+    var all = "text-primary";
+
+    switch (status)
+    {
+        case "pending":
+            pending = "text-primary fw-bold";
+            break;
+        case "inprocess":
+            inProcess = "text-primary fw-bold";
+            break;
+        case "completed":
+            completed = "text-primary fw-bold";
+            break;
+        case "approved":
+            approved = "text-primary fw-bold";
+            break;
+        case "all":
+            all = "text-primary fw-bold";
+            break;
+        default:
+            all = "active text-white bg primary";
+            break;
+    }
+}
+
+ <div class="container-fluid mt-4">
+
+    <!-- 🔹 Header -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="fw-bold">Order Management</h4>
+
+        <a asp-action="Upsert" class="btn btn-primary">
+            <i class="bi bi-plus-lg"></i> Create Order
+        </a>
+    </div>
+
+    <!-- 🔹 Card Wrapper -->
+    <div class="card shadow-sm border-0">
+
+
+
+        <!-- 🔹 Top Filters -->
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <div class="d-flex justify-content-between pb-5 pt-2">
+                <ul class="list-group list-group-horizontal-sm">
+                    <a style="text-decoration: none;" asp-controller="Order" asp-action="Index" asp-route-status="Inprocess">
+                    <li class="list-group-item @inProcess">In Process</li>
+                    </a>
+                    <a style="text-decoration: none;" asp-controller="Order" asp-action="Index" asp-route-status="pending">
+                    <li class="list-group-item @pending">Payment Pending</li>
+                    </a>
+                    <a style="text-decoration: none;" asp-controller="Order" asp-action="Index" asp-route-status="completed">
+                    <li class="list-group-item @completed">Completed</li>
+                    </a>
+                    <a style="text-decoration: none;" asp-controller="Order" asp-action="Index" asp-route-status="approved">
+                    <li class="list-group-item @approved">Approved</li>
+                    </a>
+                    <a style="text-decoration: none;" asp-controller="Order" asp-action="Index" asp-route-status="all">
+                    <li class="list-group-item @all">All</li>
+                    </a>
+                </ul>
+            </div>
+
+            <div>
+                <select id="statusFilter" class="form-select form-select-sm" style="width:150px;">
+                    <option value="">All Status</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Approved">Approved</option>
+                </select>
+            </div>
+
+            <div>
+                <input type="text" id="customSearch" class="form-control form-control-sm"
+                       placeholder="Search orders..." style="width:200px;">
+            </div>
+
+        </div>
+
+        <!-- 🔹 Table -->
+        <div class="card-body p-0">
+            <table id="tblData" class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Customer</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Total</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/order.js"></script>
+}
