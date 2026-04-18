@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Shopping_DataAccess.Repository.IRepository;
 using Shopping_Models;
@@ -7,6 +8,7 @@ using Shopping_Models.ViewModels;
 namespace ShoppingWeb.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize]
 
     public class ProductController : Controller
     {

@@ -1,4 +1,5 @@
-﻿using Shopping_DataAccess.Repository.IRepository;
+﻿using Microsoft.EntityFrameworkCore;
+using Shopping_DataAccess.Repository.IRepository;
 using Shopping_Models;
 using ShoppingWeb.Data;
 using ShoppingWeb.Models;
@@ -19,8 +20,12 @@ namespace Shopping_DataAccess.Repository
         }
         public void Update(ShoppingCart obj)
         {
-            _db.Update(obj);
+            var objFromDb = _db.ShoppingCarts.FirstOrDefault(u => u.Id == obj.Id);
 
+            if (objFromDb != null)
+            {
+                objFromDb.Count = obj.Count;
+            }
         }
 
 

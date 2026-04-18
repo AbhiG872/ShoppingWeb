@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Shopping_DataAccess.Repository.IRepository;
 using Shopping_Models;
 
 namespace ShoppingWeb.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize]
 
     public class CompanyController : Controller
     {

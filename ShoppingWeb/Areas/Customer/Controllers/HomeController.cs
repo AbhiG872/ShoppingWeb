@@ -45,23 +45,16 @@ namespace ShoppingWeb.Areas.Customer.Controllers
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
             shoppingCart.ApplicationUserId = userId;
 
-           ShoppingCart cartfromDb=_unitOfWork.ShoppingCart.Get(u=>u.ApplicationUserId == userId && u.ProductId==shoppingCart.ProductId);
+           ShoppingCart cartfromDb=_unitOfWork.ShoppingCart.Get(u=>u.ApplicationUserId == userId && u.ProductId==shoppingCart.ProductId,tracked:true);
             if (cartfromDb != null)
             {
                 cartfromDb.Count += shoppingCart.Count;
-                _unitOfWork.ShoppingCart.Update(cartfromDb);
             }
             else
             {
                 _unitOfWork.ShoppingCart.Add(shoppingCart);
             }
-                
                 _unitOfWork.Save();
-
-         
-
-
-
             return RedirectToAction(nameof(Index));
         }
 

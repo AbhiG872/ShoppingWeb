@@ -24,15 +24,7 @@ namespace ShoppingWeb.Areas.Customer.Controllers
         public IActionResult Index()
         {
 
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
-
-            ShoppingCartVM = new()
-            {
-                ShoppingCartList = _unitofwork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId, 
-                includeProperties: "Product"),
-                OrderHeader = new()
-            };
+          
             foreach (var cart in ShoppingCartVM.ShoppingCartList)
             {
                 cart.Price = GetPriceBasedQuantity(cart);
@@ -137,7 +129,6 @@ namespace ShoppingWeb.Areas.Customer.Controllers
                 }
 
                 var domain = $"{Request.Scheme}://{Request.Host}/"; // ✅ dynamic
-
                 var options = new SessionCreateOptions
                 {
                     SuccessUrl = domain + $"Customer/Cart/OrderConfirmation?id={ShoppingCartVM.OrderHeader.Id}",
@@ -207,6 +198,23 @@ namespace ShoppingWeb.Areas.Customer.Controllers
 
             return View(id);
         }
+        public IActionResult Plus(int cartId)
+        {
+            var cartfromDB = _unitofwork.ShoppingCart.Get(u => u.Id == cartId);
+
+            if (cartfromDB == null)
+            {
+                return NotFound();
+            }
+
+            // 🔹 Increase quantity
+            cartfromDB.Count += 1;
+
+            _unitofwork.ShoppingCart.Update(cartfromDB);
+            _unitofwork.Save();
+
+            return RedirectToAction(nameof(Index));
+        }
         public IActionResult Minus(int cartId)
         {
             var cartfromDB = _unitofwork.ShoppingCart.Get(u => u.Id == cartId);
@@ -215,6 +223,7 @@ namespace ShoppingWeb.Areas.Customer.Controllers
             {
                 return NotFound();
             }
+            HttpContext.Session.SetInt32(SD.SessionCart, _unitofwork.ShoppingCart.GetAll(u => u.ApplicationUserId == cartfromDB.ApplicationUserId).Count() - 1);
 
             if (cartfromDB.Count <= 1)
             {
@@ -237,6 +246,7 @@ namespace ShoppingWeb.Areas.Customer.Controllers
                 return NotFound();
             }
             _unitofwork.ShoppingCart.Remove(cartfromDB);
+             HttpContext.Session.SetInt32(SD.SessionCart, _unitofwork.ShoppingCart.GetAll(u => u.ApplicationUserId == cartfromDB.ApplicationUserId).Count() - 1);
             _unitofwork.Save();
             return RedirectToAction(nameof(Index));
         }
